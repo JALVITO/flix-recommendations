@@ -20,9 +20,15 @@ class Movie(Base):
     # SOLID (1/3): Dependency inversion is used here, when the Session is sent to the model class
     # methods, so it does not generate a direct dependency and is instead fed that component.
     @classmethod
-    def find_or_raise_by_preference_key(cls, preference_key: int, descending: bool, session: Session):
+    def find_or_raise_by_preference_key(
+        cls,
+        preference_key: int,
+        descending: bool,
+        session: Session
+    ):
         order = cls.rating.desc() if descending else cls.rating
-        movies = session.query(cls).filter(cls.preference_key == preference_key).order_by(order).limit(10).all()
+        query = session.query(cls).filter(cls.preference_key == preference_key)
+        movies = query.order_by(order).limit(10).all()
         if movies is None:
             raise KeyError('Record does not exist')
         return movies
@@ -30,8 +36,22 @@ class Movie(Base):
     # SOLID (1/3): Dependency inversion is used here, when the Session is sent to the model class
     # methods, so it does not generate a direct dependency and is instead fed that component.
     @classmethod
-    def add_movie(cls, movie_id: int, preference_key: int, movie_title: str, rating: float, year: int, session: Session):
-        movie = Movie(movie_id=movie_id, preference_key=preference_key, movie_title=movie_title, rating=rating, year=year)
+    def add_movie(
+        cls,
+        movie_id: int,
+        preference_key: int,
+        movie_title: str,
+        rating: float,
+        year: int,
+        session: Session
+    ):
+        movie = Movie(
+            movie_id=movie_id,
+            preference_key=preference_key,
+            movie_title=movie_title,
+            rating=rating,
+            year=year
+        )
         session.add(movie)
         return movie
 
@@ -42,4 +62,9 @@ class Movie(Base):
         session.query(cls).delete()
 
     def as_dict(self):
-        return {c.name: getattr(self, c.name) for c in self.__table__.columns if c.name not in ['preference_key', 'movie_id']}
+        return {
+            c.name: getattr(self, c.name)
+            for c in self.__table__.columns
+            if c.name not in ['preference_key', 'movie_id']
+        }
+

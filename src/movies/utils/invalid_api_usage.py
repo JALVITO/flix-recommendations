@@ -13,3 +13,4 @@ class InvalidAPIUsage(Exception):
         rv = dict(self.payload or ())
         rv['message'] = self.message
         return rv
+
