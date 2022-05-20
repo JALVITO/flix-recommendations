@@ -1,7 +1,7 @@
 import os
 
 from contextlib import contextmanager
-from typing import Generator, List
+from typing import Generator, List, Optional
 
 from sqlalchemy import orm
 from sqlalchemy.engine import create_engine
@@ -22,23 +22,23 @@ def create_scoped_session(
     try:
         yield session
         session.commit()
-    except IntegrityError as e:
+    except IntegrityError as err:
         session.rollback()
         if ignore_integrity_error:
             print(
-                "Ignoring {}. This happens due to a timing issue among threads/processes/nodes. "
-                "Another one might have committed a record with the same key(s).".format(repr(e))
+                f"Ignoring {repr(err)}. This happens due to a timing issue among threads/processes/"
+                "nodes. Another one might have committed a record with the same key(s)."
             )
         else:
             raise
-    except SQLAlchemyError as e:
+    except SQLAlchemyError as err:
         session.rollback()
         message = (
             "An exception is raised during the commit. "
             "This typically happens due to invalid data in the commit, "
             "e.g. exceeding max length. "
         )
-        raise ValueError(message) from e
+        raise ValueError(message) from err
     except Exception:
         session.rollback()
         raise
@@ -58,15 +58,17 @@ class Storage():
             self.engine = create_engine(get_postgres_uri(),
             isolation_level="REPEATABLE READ",
             )
-        except ImportError as e:
+        except ImportError as err:
             raise ImportError(
                 "Failed to import DB access module for the specified storage URL. "
                 "Please install appropriate one."
-            ) from e
-        self.scoped_session = orm.scoped_session(orm.sessionmaker(bind=self.engine, expire_on_commit=False))
+            ) from err
+        self.scoped_session = orm.scoped_session(
+            orm.sessionmaker(bind=self.engine, expire_on_commit=False)
+        )
         Base.metadata.create_all(self.engine)
 
-    def get_user(self, username: str) -> User:
+    def get_user(self, username: str) -> Optional[User]:
         try:
             with create_scoped_session(self.scoped_session) as session:
                 return User.find_or_raise_by_name(username, session)
@@ -76,7 +78,7 @@ class Storage():
     def store_user(self, username: str, email: str, preferences: str):
         try:
             with create_scoped_session(self.scoped_session) as session:
-                return User.add_user(username=username, email=email, preferences=preferences, session=session)
+                return User.add_user(username, email, preferences, session)
         except IntegrityError:
             return None
 
@@ -90,4 +92,4 @@ class Storage():
 
     def store_movie(self, movie_id: int, preference_key: int, movie_title: str, rating: float, year: int):
         with create_scoped_session(self.scoped_session) as session:
-            return Movie.add_movie(movie_id=movie_id, preference_key=preference_key, movie_title=movie_title, rating=rating, year=year, session=session)
+            return Movie.add_movie(movie_id, preference_key, movie_title, rating, year, session)

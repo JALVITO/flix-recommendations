@@ -1,6 +1,6 @@
-from email.policy import default
 from flask import Flask, request, jsonify
 import json
+from movies.category import Category
 from storage import Storage
 from movies.utils.invalid_api_usage import InvalidAPIUsage
 from recommendations.recommender_factory import RecommenderFactory, AlgorithmType
@@ -35,7 +35,7 @@ def get_recommendations():
     if user is None:
         raise InvalidAPIUsage("User cannot be found!", status_code=404)
 
-    preferences = [int(p) for p in user.preferences.split(',')]
+    preferences = [Category(int(p)) for p in user.preferences.split(',')]
     algorithm = RecommenderFactory.create_recommender(AlgorithmType.CATEGORY_PRODUCT)
     key = algorithm.generate_preference_key(preferences)
     movies = storage.get_movies(key, descending)
