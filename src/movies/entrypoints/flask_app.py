@@ -1,9 +1,9 @@
 from flask import Flask, request, jsonify
 import json
 from movies.category import Category
-from sql_alchemy_repository import SqlAlchemyRepository
+from movies.sql_alchemy_repository import SqlAlchemyRepository
 from movies.utils.invalid_api_usage import InvalidAPIUsage
-from recommendations.recommender_factory import RecommenderFactory, AlgorithmType
+from movies.recommendations.recommender_factory import RecommenderFactory, AlgorithmType
 
 app = Flask(__name__)
 storage = SqlAlchemyRepository()
@@ -43,15 +43,15 @@ def create_user():
     email = process_required_arg('email')
 
     preferences = request.args.getlist('preferences')
-    if preferences is None:
-        raise InvalidAPIUsage("No preferences provided!", status_code=400)
+    if len(preferences) == 0:
+        raise InvalidAPIUsage('No preferences provided!', status_code=400)
     if len(preferences) != 3:
-        raise InvalidAPIUsage("3 preferences must be selected!", status_code=400)
+        raise InvalidAPIUsage('3 preferences must be selected!', status_code=400)
 
     str_preferences = ','.join(preferences)
     user = storage.store_user(username, email, str_preferences)
 
     if user is None:
-        raise InvalidAPIUsage("User already exists!", status_code=409)
+        raise InvalidAPIUsage('User already exists!', status_code=409)
 
     return {'message': 'User created succesfully!', 'user': user.as_dict()}, 200

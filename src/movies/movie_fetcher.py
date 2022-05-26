@@ -4,7 +4,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from bs4 import BeautifulSoup
 
-from movies.storage import get_postgres_uri
+from movies.sql_alchemy_config import get_postgres_uri
 from movies.category import Category
 
 DEFAULT_SESSION_FACTORY = sessionmaker(
@@ -40,7 +40,7 @@ def get_movies():
         movie_string = tag.get_text()
         movie = (' '.join(movie_string.split()).replace('.', ''))
         movie_title = movie[len(str(index)) + 1:-7]
-        year = re.search('\((.*?)\)', movie_string).group(1)
+        year = re.search(r'\((.*?)\)', movie_string).group(1)
 
         data = {
             "movie_id": index,

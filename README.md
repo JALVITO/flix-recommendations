@@ -1,17 +1,24 @@
-# Endpoints
-
-> Note. All endpoints receive arguments using url parameters convention
-
-## Running the project
+# Running the project
 
 Project can be build using the following command:
 `docker-compose build`
 
 Project can be run using the following command:
-`docker-compose –-env-file config/dev.env up`
+`docker-compose –-env-file config/dev.env up app`
+or by running this [script](scripts/docker-compose-dev.sh).
 
 You can access the project using the following url:
 http://localhost:5005/
+
+# Testing
+
+Project can be tested using the following command:
+`docker-compose –-env-file config/test.env up test`
+or by running this [script](scripts/docker-compose-test.sh).
+
+# Endpoints
+
+> Note. All endpoints receive arguments using url parameters convention
 
 ## create_user
 

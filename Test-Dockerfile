@@ -13,8 +13,8 @@ ENV PYTHONUNBUFFERED=1 \
     FLASK_TEST=1 \
     PYTHONUNBUFFERED=1 \
     # config
-    DB_NAME=movies \
-    DB_HOST=db \
+    DB_NAME=movies_test \
+    DB_HOST=test-db \
     DB_PORT=5432 \
     DB_USER=movies \
     DB_PASS=abc123
@@ -37,8 +37,6 @@ RUN pip install -r /tmp/requirements.txt
 RUN mkdir -p /src
 
 COPY src/ /src/
-RUN pip install -e /src
-COPY tests/ /tests/
 
 WORKDIR /src
-CMD /wait && flask run --host=0.0.0.0 --port=80
+CMD /wait && python -m pytest
