@@ -1,13 +1,13 @@
 from flask import Flask, request, jsonify
 import json
 from movies.category import Category
-from storage import Storage
+from sql_alchemy_repository import SqlAlchemyRepository
 from movies.utils.invalid_api_usage import InvalidAPIUsage
 from recommendations.recommender_factory import RecommenderFactory, AlgorithmType
 from movies.movie_fetcher import get_movies
 
 app = Flask(__name__)
-storage = Storage()
+storage = SqlAlchemyRepository()
 
 # Clean Movie DB and re-populate
 movies = get_movies()

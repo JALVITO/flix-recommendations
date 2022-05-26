@@ -11,6 +11,7 @@ from sqlalchemy.orm import Session
 from movies.models.base_model import Base
 from movies.models.movie_model import Movie
 from movies.models.user_model import User
+from movies.base_repository import BaseRepository
 
 
 @contextmanager
@@ -52,7 +53,7 @@ def get_postgres_uri():
     user, db_name = "movies", "movies"
     return f"postgresql://{user}:{password}@{host}:{port}/{db_name}"
 
-class Storage():
+class SqlAlchemyRepository(BaseRepository):
     def __init__(self):
         try:
             self.engine = create_engine(get_postgres_uri(),
