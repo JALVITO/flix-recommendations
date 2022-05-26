@@ -1,6 +1,5 @@
 version: "3"
 services:
-
   app:
     container_name: movies
     build:
@@ -29,11 +28,11 @@ services:
     container_name: movies-db
     image: postgres:9.6
     environment:
-        POSTGRES_USER: movies
-        POSTGRES_DB: movies
-        POSTGRES_PASSWORD: abc123
-        PGPORT: 5432
-        PGOPTS: "-i"
+      POSTGRES_USER: movies
+      POSTGRES_DB: movies
+      POSTGRES_PASSWORD: abc123
+      PGPORT: 5432
+      PGOPTS: "-i"
     ports:
       - "5432:5432"
 
@@ -41,10 +40,10 @@ services:
     container_name: movies-db-test
     image: postgres:9.6
     environment:
-        POSTGRES_USER: movies
-        POSTGRES_DB: movies_test
-        POSTGRES_PASSWORD: abc123
-        PGPORT: 5433
-        PGOPTS: "-i"
+      POSTGRES_USER: movies
+      POSTGRES_PASSWORD: abc123
+      PGPORT: 5432
+      POSTGRES_DB: movies_test
+      PGOPTS: "-i"
     ports:
-      - "5433:5433"
+      - "5432:5432"
