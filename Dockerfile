@@ -27,6 +27,10 @@ RUN apt-get update \
     && apt-get install --no-install-recommends -y \
 	less htop inetutils-ping strace curl postgresql-client unzip
 
+# Wait for it
+ADD https://github.com/ufoscout/docker-compose-wait/releases/download/2.5.0/wait /wait
+RUN chmod +x /wait
+
 COPY requirements.txt /tmp/
 RUN pip install -r /tmp/requirements.txt
 
@@ -37,4 +41,4 @@ RUN pip install -e /src
 COPY tests/ /tests/
 
 WORKDIR /src
-CMD flask run --host=0.0.0.0 --port=80
+CMD /wait && flask run --host=0.0.0.0 --port=80
