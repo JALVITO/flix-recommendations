@@ -1,5 +1,3 @@
-import os
-
 from contextlib import contextmanager
 from typing import Generator, List, Optional
 
@@ -12,7 +10,7 @@ from movies.models.base_model import Base
 from movies.models.movie_model import Movie
 from movies.models.user_model import User
 from movies.base_repository import BaseRepository
-
+from movies.sql_alchemy_config import get_postgres_uri
 
 @contextmanager
 def create_scoped_session(
@@ -46,19 +44,11 @@ def create_scoped_session(
     finally:
         session.close()
 
-def get_postgres_uri():
-    host = os.environ.get("DB_HOST", "postgres")
-    port = os.environ.get("DB_PORT", 5432)
-    password = os.environ.get("DB_PASS", "abc123")
-    user = os.environ.get("DB_USER", "movies")
-    db_name = os.environ.get("DB_NAME", "movies")
-    return f"postgresql://{user}:{password}@{host}:{port}/{db_name}"
-
 class SqlAlchemyRepository(BaseRepository):
     def __init__(self):
         try:
             self.engine = create_engine(get_postgres_uri(),
-            isolation_level="REPEATABLE READ",
+                isolation_level="REPEATABLE READ",
             )
         except ImportError as err:
             raise ImportError(
@@ -95,3 +85,6 @@ class SqlAlchemyRepository(BaseRepository):
     def store_movie(self, movie_id: int, preference_key: int, movie_title: str, rating: float, year: int):
         with create_scoped_session(self.scoped_session) as session:
             return Movie.add_movie(movie_id, preference_key, movie_title, rating, year, session)
+
+    def drop_all(self):
+        Base.metadata.drop_all(bind=self.engine)

@@ -31,3 +31,7 @@ class BaseRepository(ABC):
         self.clean_movies()
         for movie in movies:
             self.store_movie(**movie)
+
+    @abstractmethod
+    def drop_all(self):
+        raise NotImplementedError

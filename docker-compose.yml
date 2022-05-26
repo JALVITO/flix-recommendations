@@ -7,21 +7,44 @@ services:
       context: .
       dockerfile: Dockerfile
     depends_on:
-      - postgres
+      - db
     volumes:
       - ./src:/src
       - ./tests:/tests
     ports:
       - "5005:80"
 
-  postgres:
+  test:
+    container_name: movies-test
+    build:
+      context: .
+      dockerfile: Test-Dockerfile
+    depends_on:
+      - test-db
+    volumes:
+      - ./src:/src
+      - ./tests:/tests
+
+  db:
     container_name: movies-db
     image: postgres:9.6
     environment:
-        POSTGRES_USER: ${DB_USER}
-        POSTGRES_DB: ${DB_NAME}
-        POSTGRES_PASSWORD: ${DB_PASS}
+        POSTGRES_USER: movies
+        POSTGRES_DB: movies
+        POSTGRES_PASSWORD: abc123
         PGPORT: 5432
         PGOPTS: "-i"
     ports:
       - "5432:5432"
+
+  test-db:
+    container_name: movies-db-test
+    image: postgres:9.6
+    environment:
+        POSTGRES_USER: movies
+        POSTGRES_DB: movies_test
+        POSTGRES_PASSWORD: abc123
+        PGPORT: 5433
+        PGOPTS: "-i"
+    ports:
+      - "5433:5433"

@@ -1,0 +1,38 @@
+FROM python:3.9-slim-buster
+
+# python
+ENV PYTHONUNBUFFERED=1 \
+    # prevents python creating .pyc files
+    PYTHONDONTWRITEBYTECODE=1 \
+    # pip
+    PIP_NO_CACHE_DIR=off \
+    PIP_DISABLE_PIP_VERSION_CHECK=on \
+    PIP_DEFAULT_TIMEOUT=100 \
+    # flask
+    FLASK_APP=movies/entrypoints/flask_app.py \
+    FLASK_TEST=1 \
+    PYTHONUNBUFFERED=1 \
+    # config
+    DB_NAME=movies_test \
+    DB_HOST=postgres \
+    DB_PORT=5433 \
+    DB_USER=movies \
+    DB_PASS=abc123
+
+RUN apt-get update \
+    && apt-get install --no-install-recommends -y libpq5
+
+# dev system utilities
+RUN apt-get update \
+    && apt-get install --no-install-recommends -y \
+	less htop inetutils-ping strace curl postgresql-client unzip
+
+COPY requirements.txt /tmp/
+RUN pip install -r /tmp/requirements.txt
+
+RUN mkdir -p /src
+
+COPY src/ /src/
+
+WORKDIR /src
+CMD python -m pytest
