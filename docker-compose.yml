@@ -10,6 +10,8 @@ services:
     volumes:
       - ./src:/src
       - ./tests:/tests
+    environment:
+      WAIT_HOSTS: db:5432
     ports:
       - "5005:80"
 
@@ -23,6 +25,8 @@ services:
     volumes:
       - ./src:/src
       - ./tests:/tests
+    environment:
+      WAIT_HOSTS: test-db:5432
 
   db:
     container_name: movies-db

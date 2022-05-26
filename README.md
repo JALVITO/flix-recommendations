@@ -5,6 +5,7 @@ Project can be build using the following command:
 
 Project can be run using the following command:
 `docker-compose –-env-file config/dev.env up app`
+or by running this [script](scripts/docker-compose-dev.sh).
 
 You can access the project using the following url:
 http://localhost:5005/
@@ -13,6 +14,7 @@ http://localhost:5005/
 
 Project can be tested using the following command:
 `docker-compose –-env-file config/test.env up test`
+or by running this [script](scripts/docker-compose-test.sh).
 
 # Endpoints
 
