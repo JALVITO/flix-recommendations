@@ -4,16 +4,10 @@ from movies.category import Category
 from sql_alchemy_repository import SqlAlchemyRepository
 from movies.utils.invalid_api_usage import InvalidAPIUsage
 from recommendations.recommender_factory import RecommenderFactory, AlgorithmType
-from movies.movie_fetcher import get_movies
 
 app = Flask(__name__)
 storage = SqlAlchemyRepository()
-
-# Clean Movie DB and re-populate
-movies = get_movies()
-storage.clean_movies()
-for movie in movies:
-    storage.store_movie(**movie)
+storage.re_populate_movies()
 
 def process_required_arg(name):
     value = request.args.get(name)
