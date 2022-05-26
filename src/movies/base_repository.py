@@ -1,6 +1,7 @@
 from typing import List, Optional
 from abc import ABC, abstractmethod
 
+from movies.movie_fetcher import get_movies
 from movies.models.movie_model import Movie
 from movies.models.user_model import User
 
@@ -10,7 +11,7 @@ class BaseRepository(ABC):
         raise NotImplementedError
 
     @abstractmethod
-    def store_user(self, username: str, email: str, preferences: str):
+    def store_user(self, username: str, email: str, preferences: str) -> None:
         raise NotImplementedError
 
     @abstractmethod
@@ -22,5 +23,11 @@ class BaseRepository(ABC):
         raise NotImplementedError
 
     @abstractmethod
-    def store_movie(self, movie_id: int, preference_key: int, movie_title: str, rating: float, year: int):
+    def store_movie(self, movie_id: int, preference_key: int, movie_title: str, rating: float, year: int) -> None:
         raise NotImplementedError
+
+    def re_populate_movies(self):
+        movies = get_movies()
+        self.clean_movies()
+        for movie in movies:
+            self.store_movie(**movie)
