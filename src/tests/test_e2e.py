@@ -4,6 +4,8 @@ from werkzeug.test import TestResponse
 from movies.entrypoints.flask_app import app
 from movies.sql_alchemy_repository import SqlAlchemyRepository
 
+# -- helpers
+
 @pytest.fixture
 def db():
     return SqlAlchemyRepository()
@@ -21,6 +23,19 @@ def create_emifervi(client: FlaskClient):
         f'/create_user?{args}&{preferences}',
     )
 
+def assert_missing(response: TestResponse, expected_message: str):
+    json_response = response.json
+    assert response.status_code == 400
+    assert json_response is not None
+    assert json_response['message'] == expected_message
+    return json_response
+
+# -- /create_user routes
+
+def assert_missing_create_user(response: TestResponse, expected_message: str):
+    json_response = assert_missing(response, expected_message)
+    assert 'user' not in json_response
+
 def test_create_user(client: FlaskClient):
     response = create_emifervi(client)
     json_response = response.json
@@ -28,13 +43,6 @@ def test_create_user(client: FlaskClient):
     assert json_response is not None
     assert json_response['message'] == 'User created succesfully!'
     assert 'user' in json_response
-
-def assert_missing(response: TestResponse, expected_message: str):
-    json_response = response.json
-    assert response.status_code == 400
-    assert json_response is not None
-    assert json_response['message'] == expected_message
-    assert 'user' not in json_response
 
 def test_create_user_missing(client: FlaskClient):
     assert_missing(client.post('/create_user'), 'No username provided!')
@@ -69,3 +77,31 @@ def test_create_user_duplicate(client: FlaskClient):
     assert json_response is not None
     assert json_response['message'] == 'User already exists!'
     assert 'user' not in json_response
+
+# -- /get_recommendations routes
+
+def test_get_recommendations(client: FlaskClient):
+    create_emifervi(client)
+    args = 'username=emifervi'
+    response = client.get(f'/get_recommendations?{args}')
+    json_response = response.json
+    print(response, json_response)
+    assert response.status_code == 200
+    assert json_response is not None
+    assert 'movies' in json_response
+
+def test_get_recommendations__missing_username(client: FlaskClient):
+    json_response = assert_missing(
+        client.get('/get_recommendations'),
+        'No username provided!'
+    )
+    assert 'movies' not in json_response
+
+def test_get_recommendations__user_not_found(client: FlaskClient):
+    args = 'username=emifervi'
+    response = client.get(f'/get_recommendations?{args}')
+    json_response = response.json
+    assert response.status_code == 404
+    assert json_response is not None
+    assert json_response['message'] == 'User cannot be found!'
+    assert 'movies' not in json_response
