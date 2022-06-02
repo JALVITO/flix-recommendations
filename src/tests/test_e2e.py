@@ -2,7 +2,7 @@ from flask.testing import FlaskClient
 import pytest
 from werkzeug.test import TestResponse
 from movies.entrypoints.flask_app import app
-from movies.sql_alchemy_repository import SqlAlchemyRepository
+from movies.adapters.sql_alchemy_repository import SqlAlchemyRepository
 
 # -- helpers
 

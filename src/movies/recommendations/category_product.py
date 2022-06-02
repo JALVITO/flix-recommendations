@@ -1,6 +1,6 @@
 import math
 
-from movies.category import Category
+from movies.domain.category import Category
 from movies.recommendations.recommendation_algorithm import RecommendationAlgorithm
 
 class CategoryProduct(RecommendationAlgorithm):

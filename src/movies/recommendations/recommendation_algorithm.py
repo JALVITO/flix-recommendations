@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 
-from movies.category import Category
+from movies.domain.category import Category
 
 # Design Patterns (2/2): Strategy is being used here, as we define an umbrella for recommendation
 # algorithms to use. We can create new strategies by subclassing this abstract class.
