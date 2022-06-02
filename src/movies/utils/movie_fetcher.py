@@ -4,8 +4,8 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from bs4 import BeautifulSoup
 
-from movies.sql_alchemy_config import get_postgres_uri
-from movies.category import Category
+from movies.adapters.sql_alchemy_config import get_postgres_uri
+from movies.domain.category import Category
 
 DEFAULT_SESSION_FACTORY = sessionmaker(
     bind=create_engine(
