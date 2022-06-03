@@ -4,7 +4,7 @@ from sqlalchemy import (
 )
 
 from sqlalchemy.orm import Session
-from movies.domain.base_model import Base
+from src.movies.domain.base_model import Base
 
 class User(Base):
     __tablename__ = "users"

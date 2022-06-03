@@ -6,11 +6,11 @@ from sqlalchemy.engine import create_engine
 from sqlalchemy.exc import IntegrityError, SQLAlchemyError
 from sqlalchemy.orm import Session
 
-from movies.domain.base_model import Base
-from movies.domain.movie_model import Movie
-from movies.domain.user_model import User
-from movies.adapters.base_repository import BaseRepository
-from movies.adapters.sql_alchemy_config import get_postgres_uri
+from src.movies.domain.base_model import Base
+from src.movies.domain.movie_model import Movie
+from src.movies.domain.user_model import User
+from src.movies.adapters.base_repository import BaseRepository
+from src.movies.adapters.sql_alchemy_config import get_postgres_uri
 
 @contextmanager
 def create_scoped_session(

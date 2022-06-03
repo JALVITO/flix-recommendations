@@ -1,6 +1,6 @@
 from enum import Enum
-from movies.recommendations.category_product import CategoryProduct
-from movies.recommendations.recommendation_algorithm import RecommendationAlgorithm
+from src.movies.recommendations.category_product import CategoryProduct
+from src.movies.recommendations.recommendation_algorithm import RecommendationAlgorithm
 
 class AlgorithmType(Enum):
     CATEGORY_PRODUCT = 1
