@@ -1,7 +1,7 @@
 import math
 
-from movies.domain.category import Category
-from movies.recommendations.recommendation_algorithm import RecommendationAlgorithm
+from src.movies.domain.category import Category
+from src.movies.recommendations.recommendation_algorithm import RecommendationAlgorithm
 
 class CategoryProduct(RecommendationAlgorithm):
     def generate_preference_key(self, preferences: list[Category]) -> int:

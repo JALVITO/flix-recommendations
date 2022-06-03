@@ -1,9 +1,9 @@
 from typing import List, Optional
 from abc import ABC, abstractmethod
 
-from movies.utils.movie_fetcher import get_movies
-from movies.domain.movie_model import Movie
-from movies.domain.user_model import User
+from src.movies.utils.movie_fetcher import get_movies
+from src.movies.domain.movie_model import Movie
+from src.movies.domain.user_model import User
 
 class BaseRepository(ABC):
     @abstractmethod

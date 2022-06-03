@@ -1,9 +1,9 @@
 from flask import Flask, request, jsonify
 import json
-from movies.domain.category import Category
-from movies.adapters.sql_alchemy_repository import SqlAlchemyRepository
-from movies.utils.invalid_api_usage import InvalidAPIUsage
-from movies.recommendations.recommender_factory import RecommenderFactory, AlgorithmType
+from src.movies.domain.category import Category
+from src.movies.adapters.sql_alchemy_repository import SqlAlchemyRepository
+from src.movies.utils.invalid_api_usage import InvalidAPIUsage
+from src.movies.recommendations.recommender_factory import RecommenderFactory, AlgorithmType
 
 app = Flask(__name__)
 storage = SqlAlchemyRepository()

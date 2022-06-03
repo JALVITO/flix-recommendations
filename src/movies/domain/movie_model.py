@@ -6,7 +6,7 @@ from sqlalchemy import (
 )
 
 from sqlalchemy.orm import Session
-from movies.domain.base_model import Base
+from src.movies.domain.base_model import Base
 
 class Movie(Base):
     __tablename__ = "movies"
