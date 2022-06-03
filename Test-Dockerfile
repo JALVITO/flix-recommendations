@@ -15,7 +15,7 @@ ENV PYTHONUNBUFFERED=1 \
     # config
     DB_NAME=movies_test \
     DB_HOST=test-db \
-    DB_PORT=5432 \
+    DB_PORT=5433 \
     DB_USER=movies \
     DB_PASS=abc123
 
