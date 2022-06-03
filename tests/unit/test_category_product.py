@@ -7,38 +7,19 @@ from src.movies.domain.category import Category
 def category_product():
     return CategoryProduct()
 
-def test_category_product_operation(category_product: CategoryProduct):
+testdata = [
     # (1 * 2 * 5) % 5 + 1 = 10 % 5 + 1 = 1
-    assert category_product.generate_preference_key([
-        Category.COMEDY,
-        Category.DRAMA,
-        Category.ADVENTURE
-    ]) == 1
-
+    ([Category.COMEDY, Category.DRAMA, Category.ADVENTURE], 1),
     # (1 * 2 * 3) % 5 + 1 = 6 % 5 + 1 = 2
-    assert category_product.generate_preference_key([
-        Category.COMEDY,
-        Category.DRAMA,
-        Category.SCI_FI
-    ]) == 2
-
+    ([Category.COMEDY, Category.DRAMA, Category.SCI_FI], 2),
     # (1 * 3 * 4) % 5 + 1 = 12 % 5 + 1 = 3
-    assert category_product.generate_preference_key([
-        Category.COMEDY,
-        Category.SCI_FI,
-        Category.ROMANTIC
-    ]) == 3
-
+    ([Category.COMEDY, Category.SCI_FI, Category.ROMANTIC], 3),
     # (1 * 2 * 4) % 5 + 1 = 8 % 5 + 1 = 4
-    assert category_product.generate_preference_key([
-        Category.COMEDY,
-        Category.DRAMA,
-        Category.ROMANTIC
-    ]) == 4
-
+    ([Category.COMEDY, Category.DRAMA, Category.ROMANTIC], 4),
     # (2 * 3 * 4) % 5 + 1 = 24 % 5 + 1 = 5
-    assert category_product.generate_preference_key([
-        Category.DRAMA,
-        Category.SCI_FI,
-        Category.ROMANTIC
-    ]) == 5
+    ([Category.DRAMA, Category.SCI_FI, Category.ROMANTIC], 5),
+]
+
+@pytest.mark.parametrize('categories,expected_key', testdata, ids=[f'key_{data[-1]}' for data in testdata])
+def test_category_product_operation(category_product: CategoryProduct, categories: list[Category], expected_key: int):
+    assert category_product.generate_preference_key(categories) == expected_key
