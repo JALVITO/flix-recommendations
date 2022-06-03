@@ -1,6 +1,6 @@
 # Running the project
 
-Project can be build using the following command:
+Project can be built using the following command:
 `docker-compose build`
 
 Project can be run using the following command:
